@@ -10,7 +10,8 @@ import { eligibleTitles, trackIds, milestones, milestoneToPoints } from '../cons
 import PointSummaries from '../components/PointSummaries'
 import type { Milestone, MilestoneMap, TrackId } from '../constants'
 import React from 'react'
-import TitleSelector from '../components/TitleSelector'
+import TitleSelector from '../components/TitleSelector';
+import Admin from '../components/Admin';
 
 type SnowflakeAppState = {
   milestoneByTrack: MilestoneMap,
@@ -207,6 +208,8 @@ class SnowflakeApp extends React.Component<Props, SnowflakeAppState> {
             Improvements by Liferay
           </div>
         </div>
+
+        <Admin />
       </main>
     )
   }
