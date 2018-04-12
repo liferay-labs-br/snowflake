@@ -198,6 +198,12 @@ class Admin extends React.Component<Props> {
                             border-width: 0;
                             border-radius: 4px;
                             font-weight: bold;
+                            cursor: pointer;
+                            transition: transform .2s ease-in-out;
+                        }
+
+                        .btn:hover {
+                            transform: scale(1.1);
                         }
 
                         .btn.btn-default {
