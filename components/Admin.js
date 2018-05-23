@@ -1,8 +1,12 @@
 import React from 'react'
-import WeDeploy from 'wedeploy';
 
-const URL = 'https://db-snowflake.wedeploy.io';
-const PATH = 'users';
+import {
+	getUsers,
+	createUser,
+	updateUser,
+	deleteUser,
+	userChanged,
+} from '../lib/userservice';
 
 const hashToState = (hash: String) => {
     if (!hash) return null
@@ -20,24 +24,22 @@ const hashToState = (hash: String) => {
 class Admin extends React.Component<Props> {
     constructor(props: Props) {
         super(props)
-        
+
         this.state = {
             users: []
         }
     }
 
     componentDidMount() {
-        WeDeploy.data(URL).get(PATH).then(response => {
-            this.setState({users: response});
+        getUsers().then(users => {
+            this.setState({users});
 		}).catch(error => {
 			console.error(error);
 		});
 
-		WeDeploy.data(URL).watch(PATH).on('changes', response => {
-			this.setState({users: response});
-		}).on('fail', error => {
-			console.log(error);
-        });
+		userChanged()
+			.then(users => this.setState({users}))
+			.catch(console.log);
     }
 
     getItemId(name) {
@@ -60,9 +62,7 @@ class Admin extends React.Component<Props> {
         if (id == -1) {
             if (!confirm(`Do you want to save the user ${state.name}?`)) return;
 
-            WeDeploy.data(URL).create(PATH, {
-                state
-            }).then(data => {
+            createUser({state}).then(data => {
                 console.log(data);
             }).catch(error => {
                 console.error(error);
@@ -70,7 +70,7 @@ class Admin extends React.Component<Props> {
         } else {
             if (!confirm(`Do you want to update the user ${state.name}?`)) return;
 
-            WeDeploy.data(URL).update(`${PATH}/${id}`, {
+            updateUser(id, {
                 state
             }).then(function(data) {
                 console.log(data);
@@ -92,7 +92,7 @@ class Admin extends React.Component<Props> {
 
         const id = target.dataset.id;
 
-        WeDeploy.data(URL).delete(`${PATH}/${id}`);
+        deleteUser(id);
     }
 
     renderList() {
