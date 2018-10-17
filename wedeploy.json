@@ -1,5 +1,5 @@
 {
-    "id": "static",
+    "id": "ui",
     "image": "wedeploy/hosting:2.0.0",
     "env": {
         "WEDEPLOY_WEB_PATH": "./out"
